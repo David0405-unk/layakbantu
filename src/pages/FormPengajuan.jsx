@@ -6,6 +6,8 @@ import { hitungSkor } from '../utils/hitungSkor';
 function FormPengajuan() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
+    namaLengkap: '',
+    nomorKK: '',
     penghasilan: '',
     jumlahTanggungan: '',
     statusPekerjaan: '',
@@ -14,6 +16,7 @@ function FormPengajuan() {
     alamat: '',
     noTelepon: ''
   });
+  const [fotoRumah, setFotoRumah] = useState(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -21,12 +24,16 @@ function FormPengajuan() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  const handleFileChange = (e) => {
+    setFotoRumah(e.target.files[0]);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    if (Object.values(form).some((v) => v === '')) {
-      setError('Semua data wajib diisi.');
+    if (Object.values(form).some((v) => v === '') || !fotoRumah) {
+      setError('Semua data termasuk foto rumah wajib diisi.');
       return;
     }
 
@@ -34,6 +41,21 @@ function FormPengajuan() {
 
     const { data: { session } } = await supabase.auth.getSession();
     const idWarga = session.user.id;
+
+    // upload foto rumah ke Supabase Storage
+    const namaFile = `${idWarga}-${Date.now()}-${fotoRumah.name}`;
+    const { error: uploadError } = await supabase.storage
+      .from('foto-rumah')
+      .upload(namaFile, fotoRumah);
+
+    if (uploadError) {
+      setError('Gagal upload foto: ' + uploadError.message);
+      setLoading(false);
+      return;
+    }
+
+    const { data: urlData } = supabase.storage.from('foto-rumah').getPublicUrl(namaFile);
+    const fotoUrl = urlData.publicUrl;
 
     const hasil = hitungSkor({
       penghasilan: Number(form.penghasilan),
@@ -45,6 +67,8 @@ function FormPengajuan() {
 
     const { error: insertError } = await supabase.from('tb_pengajuan').insert({
       id_warga: idWarga,
+      nama_lengkap: form.namaLengkap,
+      nomor_kk: form.nomorKK,
       penghasilan: Number(form.penghasilan),
       jumlah_tanggungan: Number(form.jumlahTanggungan),
       status_pekerjaan: form.statusPekerjaan,
@@ -52,6 +76,7 @@ function FormPengajuan() {
       kepemilikan_aset: form.kepemilikanAset,
       alamat: form.alamat,
       no_telepon: form.noTelepon,
+      foto_rumah: fotoUrl,
       skor_penghasilan: hasil.skorPenghasilan,
       skor_tanggungan: hasil.skorTanggungan,
       skor_pekerjaan: hasil.skorPekerjaan,
@@ -76,6 +101,12 @@ function FormPengajuan() {
     <div className="form-pengajuan-page">
       <h1>Form Pengajuan Bantuan</h1>
       <form onSubmit={handleSubmit}>
+        <label>Nama Lengkap</label>
+        <input type="text" name="namaLengkap" value={form.namaLengkap} onChange={handleChange} required />
+
+        <label>Nomor Kartu Keluarga (KK)</label>
+        <input type="text" name="nomorKK" value={form.nomorKK} onChange={handleChange} placeholder="16 digit nomor KK" required />
+
         <label>Penghasilan per bulan (Rp)</label>
         <input type="number" name="penghasilan" value={form.penghasilan} onChange={handleChange} required />
 
@@ -98,6 +129,9 @@ function FormPengajuan() {
           <option value="Sederhana">Sederhana</option>
           <option value="Layak">Layak</option>
         </select>
+
+        <label>Foto Kondisi Rumah</label>
+        <input type="file" accept="image/*" onChange={handleFileChange} required />
 
         <label>Kepemilikan Aset</label>
         <select name="kepemilikanAset" value={form.kepemilikanAset} onChange={handleChange} required>

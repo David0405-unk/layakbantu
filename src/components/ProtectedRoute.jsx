@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
+import Navbar from './Navbar';
 
 function ProtectedRoute({ children, requiredRole }) {
   const [loading, setLoading] = useState(true);
@@ -16,8 +17,15 @@ function ProtectedRoute({ children, requiredRole }) {
     check();
   }, [requiredRole]);
 
-  if (loading) return <p>Memuat...</p>;
-  return allowed ? children : <Navigate to="/login" />;
+  if (loading) return <p className="loading-text">Memuat...</p>;
+  if (!allowed) return <Navigate to="/login" />;
+
+  return (
+    <div className="app-shell">
+      <Navbar role={requiredRole} />
+      <main className="main-content">{children}</main>
+    </div>
+  );
 }
 
 export default ProtectedRoute;

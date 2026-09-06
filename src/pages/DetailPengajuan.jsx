@@ -55,6 +55,8 @@ function DetailPengajuan() {
       <h1>Detail Pengajuan</h1>
 
       <div className="detail-card">
+        <p><strong>Nama Lengkap:</strong> {pengajuan.nama_lengkap}</p>
+        <p><strong>Nomor KK:</strong> {pengajuan.nomor_kk}</p>
         <p><strong>Penghasilan:</strong> Rp{Number(pengajuan.penghasilan).toLocaleString('id-ID')}</p>
         <p><strong>Jumlah Tanggungan:</strong> {pengajuan.jumlah_tanggungan}</p>
         <p><strong>Status Pekerjaan:</strong> {pengajuan.status_pekerjaan}</p>
@@ -72,6 +74,11 @@ function DetailPengajuan() {
           <li>Pekerjaan (20%): {pengajuan.skor_pekerjaan}</li>
           <li>Kondisi Rumah (15%): {pengajuan.skor_rumah}</li>
           <li>Kepemilikan Aset (15%): {pengajuan.skor_aset}</li>
+          <div>
+          <strong>Foto Rumah:</strong>
+          <br />
+          <img src={pengajuan.foto_rumah} alt="Foto rumah pengaju" style={{ maxWidth: '100%', borderRadius: '8px', marginTop: '8px' }} />
+          </div>
         </ul>
         <p><strong>Total Skor:</strong> {pengajuan.total_skor}</p>
         <p><strong>Kategori Kelayakan (otomatis):</strong> {pengajuan.kategori_kelayakan}</p>

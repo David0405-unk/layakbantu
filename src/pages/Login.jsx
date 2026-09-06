@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
+import { Link } from 'react-router-dom';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ function Login() {
     }
 
     const role = data.user.user_metadata?.role;
-    navigate(role === 'admin' ? '/admin' : '/pengajuan');
+    navigate(role === 'admin' ? '/admin' : '/dashboard'); 
   };
 
   return (
@@ -32,6 +33,7 @@ function Login() {
         {error && <p className="error">{error}</p>}
         <button type="submit">Masuk</button>
       </form>
+      <p className="switch-auth">Belum punya akun? <Link to="/register">Daftar di sini</Link></p>
     </div>
   );
 }

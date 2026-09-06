@@ -1,19 +1,15 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 
-function Navbar() {
+function Navbar({ role }) {
   const [nama, setNama] = useState('');
-  const [role, setRole] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     const getUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      if (session) {
-        setNama(session.user.user_metadata?.nama || session.user.email);
-        setRole(session.user.user_metadata?.role || '');
-      }
+      setNama(session?.user?.user_metadata?.nama || session?.user?.email);
     };
     getUser();
   }, []);
@@ -23,16 +19,43 @@ function Navbar() {
     navigate('/login');
   };
 
-  if (!nama) return null; // jangan tampil di halaman login/register
+  const menuWarga = [
+    { to: '/dashboard', label: 'Dashboard' },
+    { to: '/pengajuan', label: 'Buat Pengajuan' },
+    { to: '/status', label: 'Riwayat Pengajuan' },
+  ];
+  const menuAdmin = [{ to: '/admin', label: 'Dashboard' }];
+  const menu = role === 'admin' ? menuAdmin : menuWarga;
 
   return (
-    <nav className="navbar">
-      <span className="navbar-brand">LayakBantu</span>
-      <div className="navbar-user">
-        <span>{nama} ({role})</span>
-        <button onClick={handleLogout}>Keluar</button>
+    <aside className="sidebar">
+      <div className="sidebar-brand">
+        <div className="brand-logo">LB</div>
+        <div>
+          <div className="brand-name">LayakBantu</div>
+          <div className="brand-sub">Portal Bantuan</div>
+        </div>
       </div>
-    </nav>
+
+      <nav className="sidebar-menu">
+        {menu.map((item) => (
+          <NavLink key={item.to} to={item.to} className={({ isActive }) => 'menu-item' + (isActive ? ' active' : '')}>
+            {item.label}
+          </NavLink>
+        ))}
+      </nav>
+
+      <div className="sidebar-footer">
+        <div className="user-info">
+          <div className="user-avatar">{nama?.[0]?.toUpperCase() || 'U'}</div>
+          <div>
+            <div className="user-name">{nama}</div>
+            <div className="user-role">{role === 'admin' ? 'Admin' : 'Warga'}</div>
+          </div>
+        </div>
+        <button className="logout-btn" onClick={handleLogout}>Keluar</button>
+      </div>
+    </aside>
   );
 }
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 
 function Register() {
@@ -16,7 +16,7 @@ function Register() {
     const { error } = await supabase.auth.signUp({
       email,
       password,
-      options: { data: { nama, role: 'warga' } } // default role: warga
+      options: { data: { nama, role: 'warga' } }
     });
 
     if (error) setError(error.message);
@@ -33,6 +33,7 @@ function Register() {
         {error && <p className="error">{error}</p>}
         <button type="submit">Daftar</button>
       </form>
+      <p className="switch-auth">Sudah punya akun? <Link to="/login">Masuk di sini</Link></p>
     </div>
   );
 }
