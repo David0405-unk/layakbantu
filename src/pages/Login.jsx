@@ -33,7 +33,11 @@ function Login() {
         {error && <p className="error">{error}</p>}
         <button type="submit">Masuk</button>
       </form>
+      <p className="switch-auth">
+      <Link to="/forgot-password">Lupa password?</Link>
+      </p>
       <p className="switch-auth">Belum punya akun? <Link to="/register">Daftar di sini</Link></p>
+
     </div>
   );
 }

@@ -6,12 +6,18 @@ function Register() {
   const [nama, setNama] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [konfirmasi, setKonfirmasi] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (password !== konfirmasi) {
+      setError('Password dan konfirmasi password tidak cocok.');
+      return;
+    }
 
     const { error } = await supabase.auth.signUp({
       email,
@@ -30,6 +36,7 @@ function Register() {
         <input type="text" placeholder="Nama Lengkap" value={nama} onChange={(e) => setNama(e.target.value)} required />
         <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <input type="password" placeholder="Konfirmasi Password" value={konfirmasi} onChange={(e) => setKonfirmasi(e.target.value)} required />
         {error && <p className="error">{error}</p>}
         <button type="submit">Daftar</button>
       </form>

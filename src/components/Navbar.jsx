@@ -28,8 +28,8 @@ function Navbar({ role }) {
   const menu = role === 'admin' ? menuAdmin : menuWarga;
 
   return (
-    <aside className="sidebar">
-      <div className="sidebar-brand">
+    <header className="topbar">
+      <div className="topbar-brand">
         <div className="brand-logo">LB</div>
         <div>
           <div className="brand-name">LayakBantu</div>
@@ -37,7 +37,7 @@ function Navbar({ role }) {
         </div>
       </div>
 
-      <nav className="sidebar-menu">
+      <nav className="topbar-menu">
         {menu.map((item) => (
           <NavLink key={item.to} to={item.to} className={({ isActive }) => 'menu-item' + (isActive ? ' active' : '')}>
             {item.label}
@@ -45,17 +45,15 @@ function Navbar({ role }) {
         ))}
       </nav>
 
-      <div className="sidebar-footer">
-        <div className="user-info">
-          <div className="user-avatar">{nama?.[0]?.toUpperCase() || 'U'}</div>
-          <div>
-            <div className="user-name">{nama}</div>
-            <div className="user-role">{role === 'admin' ? 'Admin' : 'Warga'}</div>
-          </div>
+      <div className="topbar-user">
+        <div className="user-avatar">{nama?.[0]?.toUpperCase() || 'U'}</div>
+        <div>
+          <div className="user-name">{nama}</div>
+          <div className="user-role">{role === 'admin' ? 'Admin' : 'Warga'}</div>
         </div>
         <button className="logout-btn" onClick={handleLogout}>Keluar</button>
       </div>
-    </aside>
+    </header>
   );
 }
 

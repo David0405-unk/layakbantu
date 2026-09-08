@@ -8,6 +8,7 @@ function DetailPengajuan() {
   const [pengajuan, setPengajuan] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [penyaluran, setPenyaluran] = useState(null);
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -17,6 +18,14 @@ function DetailPengajuan() {
         .eq('id_pengajuan', id)
         .single();
       if (!error) setPengajuan(data);
+      if (data.status_akhir === 'Disetujui') {
+        const { data: dataPenyaluran } = await supabase
+          .from('tb_penyaluran')
+          .select('*')
+          .eq('id_pengajuan', id)
+          .single();
+          if (dataPenyaluran) setPenyaluran(dataPenyaluran);
+        }
       setLoading(false);
     };
     fetchDetail();
@@ -85,6 +94,13 @@ function DetailPengajuan() {
       </div>
 
       <div className="status-akhir">
+        {penyaluran && (
+          <div className="detail-card">
+          <h3>Riwayat Penyaluran</h3>
+          <p><strong>Tanggal Disalurkan:</strong> {new Date(penyaluran.tanggal_penyaluran).toLocaleDateString('id-ID')}</p>
+          <p><strong>Keterangan:</strong> {penyaluran.keterangan}</p>
+          </div>
+       )}
         <p><strong>Status Saat Ini:</strong> {pengajuan.status_akhir}</p>
         {pengajuan.status_akhir === 'Menunggu' && (
           <div className="actions">

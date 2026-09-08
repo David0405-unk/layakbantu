@@ -6,6 +6,7 @@ function AdminDashboard() {
   const [pengajuanList, setPengajuanList] = useState([]);
   const [filterStatus, setFilterStatus] = useState('Semua');
   const [loading, setLoading] = useState(true);
+  const [pencarian, setPencarian] = useState('');
 
   const fetchPengajuan = async () => {
     setLoading(true);
@@ -29,6 +30,10 @@ function AdminDashboard() {
     menunggu: pengajuanList.filter((p) => p.status_akhir === 'Menunggu').length,
     disetujui: pengajuanList.filter((p) => p.status_akhir === 'Disetujui').length,
   };
+  const dataTertampil = pengajuanList.filter((p) =>
+    p.nama_lengkap?.toLowerCase().includes(pencarian.toLowerCase()) ||
+    p.nomor_kk?.includes(pencarian)
+  );
 
   return (
     <div className="admin-dashboard">
@@ -54,10 +59,15 @@ function AdminDashboard() {
       {loading ? (
         <p>Memuat data...</p>
       ) : (
+        <>
+        <div className="filter">
+          <input type="text" placeholder="Cari nama atau nomor KK..." value={pencarian} onChange={(e) => setPencarian(e.target.value)} style={{ maxWidth: '300px', display: 'inline-block' }} />
+        </div>
         <table>
           <thead>
             <tr>
               <th>Tanggal</th>
+              <th>Nama</th>
               <th>Total Skor</th>
               <th>Kategori</th>
               <th>Status</th>
@@ -65,9 +75,10 @@ function AdminDashboard() {
             </tr>
           </thead>
           <tbody>
-            {pengajuanList.map((p) => (
+            {dataTertampil.map((p) => (
               <tr key={p.id_pengajuan}>
                 <td>{new Date(p.tanggal_pengajuan).toLocaleDateString('id-ID')}</td>
+                <td>{p.nama_lengkap}</td>
                 <td>{p.total_skor}</td>
                 <td>{p.kategori_kelayakan}</td>
                 <td>{p.status_akhir}</td>
@@ -76,6 +87,7 @@ function AdminDashboard() {
             ))}
           </tbody>
         </table>
+        </>
       )}
     </div>
   );

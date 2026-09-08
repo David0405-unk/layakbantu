@@ -8,7 +8,10 @@ import AdminDashboard from './pages/AdminDashboard';
 import DetailPengajuan from './pages/DetailPengajuan';
 import FormPenyaluran from './pages/FormPenyaluran';
 import ProtectedRoute from './components/ProtectedRoute';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 import './App.css';
+
 
 function App() {
   return (
@@ -17,6 +20,8 @@ function App() {
         <Route path="/" element={<Navigate to="/login" />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route path="/dashboard" element={<ProtectedRoute requiredRole="warga"><DashboardWarga /></ProtectedRoute>} />
         <Route path="/pengajuan" element={<ProtectedRoute requiredRole="warga"><FormPengajuan /></ProtectedRoute>} />
