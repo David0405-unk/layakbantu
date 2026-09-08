@@ -1,336 +1,144 @@
-/* ===== Reset & Base ===== */
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
+html, body { margin: 0; overflow-x: hidden; }
 
 body {
-  margin: 0;
   font-family: 'Segoe UI', system-ui, sans-serif;
   background: #f4f6f8;
   color: #1e293b;
 }
 
-h1 {
-  color: #0f766e;
-  margin-bottom: 24px;
-  line-height: 1.3;   
-  font-size: 28px;      
-}
-
-a {
-  color: #0f766e;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-/* ===== Halaman Login & Register ===== */
-.login-page,
-.register-page {
-  max-width: 400px;
-  margin: 80px auto;
-  background: white;
-  padding: 32px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  text-align: center;
-}
-
-.login-page form,
-.register-page form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+h1 { color: #0f766e; margin: 0 0 20px; line-height: 1.3; font-size: 26px; }
+a { color: #0f766e; text-decoration: none; font-weight: 600; }
+a:hover { text-decoration: underline; }
 
 input, select, textarea {
-  padding: 10px 12px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 14px;
-  width: 100%;
+  padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px;
+  font-size: 14px; width: 100%; font-family: inherit;
 }
 
 button {
-  background: #0f766e;
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s;
+  background: #0f766e; color: white; border: none; padding: 10px 16px;
+  border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 14px;
 }
+button:hover { background: #0d5f58; }
+button:disabled { background: #94a3b8; cursor: not-allowed; }
 
-button:hover {
-  background: #0d5f58;
+.error { color: #dc2626; font-size: 14px; margin: 4px 0; }
+.success-msg { color: #16a34a; font-size: 14px; margin: 4px 0; }
+
+/* ===== AUTH PAGES (Login/Register/Forgot/Reset) ===== */
+.login-page, .register-page {
+  min-height: 100vh; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; padding: 20px;
 }
-
-button:disabled {
-  background: #94a3b8;
-  cursor: not-allowed;
+.login-page > *, .register-page > * { width: 100%; max-width: 420px; }
+.login-page h1, .register-page h1,
+.login-page form, .register-page form,
+.login-page p, .register-page p {
+  background: white; text-align: center;
 }
-
-.error {
-  color: #dc2626;
-  font-size: 14px;
-  margin: 4px 0;
+.login-page, .register-page {
+  background: linear-gradient(135deg, #f0fdfa, #f4f6f8);
 }
-
-/* ===== Form Pengajuan ===== */
-.form-pengajuan-page {
-  max-width: 600px;
-  margin: 40px auto;
-  background: white;
-  padding: 32px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+.login-page form, .register-page form {
+  display: flex; flex-direction: column; gap: 12px;
+  background: white; padding: 36px; border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
 }
-
-.form-pengajuan-page label {
-  font-weight: 600;
-  margin-top: 8px;
-  display: block;
-  font-size: 14px;
-  color: #334155;
+.login-page h1, .register-page h1 {
+  background: transparent; text-align: center; max-width: 420px; width: 100%;
 }
+.switch-auth { text-align: center; font-size: 13px; margin: 10px 0 0; max-width: 420px; width: 100%; }
 
-/* ===== Status Pengajuan (Warga) ===== */
-.status-pengajuan-page {
-  max-width: 500px;
-  margin: 40px auto;
-  text-align: center;
+/* ===== TOPBAR ===== */
+.app-shell { min-height: 100vh; display: flex; flex-direction: column; }
+.topbar {
+  background: white; border-bottom: 1px solid #e2e8f0;
+  padding: 12px 24px; display: flex; align-items: center;
+  justify-content: space-between; flex-wrap: wrap; gap: 12px;
 }
-
-.status-card {
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  text-align: left;
+.topbar-brand { display: flex; align-items: center; gap: 10px; }
+.brand-logo {
+  width: 36px; height: 36px; background: #0f766e; color: white;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px; font-weight: 700; flex-shrink: 0;
 }
-
-.status-card p {
-  margin: 8px 0;
-}
-
-details {
-  margin-top: 16px;
-  background: white;
-  padding: 16px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  text-align: left;
-}
-
-summary {
-  cursor: pointer;
-  font-weight: 600;
-  color: #0f766e;
-}
-
-/* ===== Badge Status ===== */
-.status-card span {
-  padding: 4px 10px;
-  border-radius: 999px;
-  font-weight: 700;
-  font-size: 13px;
-  color: white;
-}
-
-/* ===== Dashboard Admin ===== */
-.admin-dashboard {
-  max-width: 900px;
-  margin: 40px auto;
-  padding: 0 16px;
-}
-
-.stats {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.stats div {
-  background: white;
-  padding: 16px 24px;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-  font-weight: 600;
-  flex: 1;
-  text-align: center;
-}
-
-.filter {
-  margin-bottom: 16px;
-}
-
-.filter select {
-  width: auto;
-  display: inline-block;
-  margin-left: 8px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-
-th, td {
-  padding: 12px 16px;
-  text-align: left;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-th {
-  background: #0f766e;
-  color: white;
-  font-weight: 600;
-}
-
-tr:hover {
-  background: #f1f5f9;
-}
-
-/* ===== Detail Pengajuan ===== */
-.detail-pengajuan-page {
-  max-width: 600px;
-  margin: 40px auto;
-}
-
-.detail-card, .skor-card, .status-akhir {
-  background: white;
-  padding: 20px 24px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-  margin-bottom: 16px;
-}
-
-.skor-card ul {
-  padding-left: 20px;
-}
-
-.actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-.actions button:nth-child(1) { background: #16a34a; }
-.actions button:nth-child(1):hover { background: #15803d; }
-.actions button:nth-child(2) { background: #d97706; }
-.actions button:nth-child(2):hover { background: #b45309; }
-.actions button:nth-child(3) { background: #dc2626; }
-.actions button:nth-child(3):hover { background: #b91c1c; }
-
-/* ===== Form Penyaluran ===== */
-.form-penyaluran-page {
-  max-width: 500px;
-  margin: 40px auto;
-  background: white;
-  padding: 32px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-.form-penyaluran-page form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 16px;
-}
-/* ===== Navbar ===== */
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: #0f766e;
-  color: white;
-  padding: 14px 24px;
-}
-
-.navbar-brand {
-  font-weight: 700;
-  font-size: 18px;
-}
-
-.navbar-user {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-}
-
-
-.navbar-user button {
-  background: white;
-  color: #0f766e;
-  padding: 6px 14px;
-}
-
-.navbar-user button:hover {
-  background: #e2e8f0;
-}
-
-html, body { overflow-x: hidden; }
-
-.app-shell { display: flex; min-height: 100vh; }
-
-.sidebar {
-  width: 240px; background: white; border-right: 1px solid #e2e8f0;
-  display: flex; flex-direction: column; padding: 20px 16px; flex-shrink: 0;
-}
-.sidebar-brand { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
-.brand-logo { width: 36px; height: 36px; background: #0f766e; color: white; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-weight: 700; }
 .brand-name { font-weight: 700; font-size: 15px; }
 .brand-sub { font-size: 12px; color: #64748b; }
-.sidebar-menu { display: flex; flex-direction: column; gap: 4px; flex: 1; }
-.menu-item { display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: 8px; color: #334155; font-weight: 500; font-size: 14px; }
-.menu-item.active, .menu-item:hover { background: #e6f4f2; color: #0f766e; }
-.sidebar-footer { border-top: 1px solid #e2e8f0; padding-top: 12px; }
-.user-info { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-.user-avatar { width: 32px; height: 32px; border-radius: 50%; background: #cbd5e1; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px; }
+.topbar-menu { display: flex; gap: 6px; flex-wrap: wrap; }
+.topbar-menu .menu-item { padding: 8px 14px; border-radius: 8px; font-weight: 600; font-size: 14px; color: #334155; }
+.topbar-menu .menu-item.active, .topbar-menu .menu-item:hover { background: #e6f4f2; color: #0f766e; }
+.topbar-user { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.user-avatar {
+  width: 32px; height: 32px; border-radius: 50%; background: #cbd5e1;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; flex-shrink: 0;
+}
 .user-name { font-size: 13px; font-weight: 600; }
 .user-role { font-size: 11px; color: #64748b; }
-.logout-btn { width: 100%; background: #f1f5f9; color: #334155; }
+.logout-btn { background: #f1f5f9; color: #334155; padding: 8px 14px; }
 .logout-btn:hover { background: #e2e8f0; }
-.main-content { flex: 1; padding: 32px; min-width: 0; }
 
-.hero-card { background: linear-gradient(135deg, #0f766e, #14b8a6); color: white; padding: 24px; border-radius: 12px; margin-bottom: 20px; }
+.main-content { flex: 1; padding: 32px; max-width: 1000px; margin: 0 auto; width: 100%; }
+
+/* ===== DASHBOARD WARGA ===== */
+.hero-card {
+  background: linear-gradient(135deg, #0f766e, #14b8a6); color: white;
+  padding: 24px; border-radius: 12px; margin-bottom: 20px;
+}
+.hero-card h2 { color: white; margin: 8px 0; }
 .badge-role { background: rgba(255,255,255,0.25); padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
 .btn-hero { display: inline-block; margin-top: 12px; background: white; color: #0f766e; padding: 8px 16px; border-radius: 8px; font-weight: 700; }
-.summary-cards { display: flex; gap: 16px; margin-bottom: 20px; }
-.summary-card { flex: 1; background: white; padding: 16px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.btn-hero:hover { text-decoration: none; background: #f0fdfa; }
+
+.summary-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 20px; }
+.summary-card { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
 .summary-label { font-size: 12px; color: #64748b; margin: 0 0 6px; }
 .summary-value { font-size: 20px; font-weight: 700; margin: 0; }
 .link-riwayat { display: inline-block; margin-top: 8px; }
 
+/* ===== RIWAYAT ===== */
 .riwayat-card { background: white; padding: 16px 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 12px; }
-.riwayat-header { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; color: #64748b; }
-.badge { padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; color: white; }
+.riwayat-header { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; font-size: 13px; color: #64748b; }
+.badge { padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; color: white; white-space: nowrap; }
 .badge-Menunggu { background: #d97706; }
 .badge-Disetujui { background: #16a34a; }
 .badge-Ditolak { background: #dc2626; }
 .badge-Dipertimbangkan { background: #2563eb; }
 
-.switch-auth { margin-top: 12px; font-size: 13px; }
+/* ===== FORM PENGAJUAN / PENYALURAN ===== */
+.form-pengajuan-page, .form-penyaluran-page {
+  max-width: 600px; margin: 0 auto; background: white;
+  padding: 28px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.form-pengajuan-page label, .form-penyaluran-page label { font-weight: 600; margin-top: 8px; display: block; font-size: 14px; color: #334155; }
+.form-pengajuan-page form, .form-penyaluran-page form { display: flex; flex-direction: column; gap: 4px; }
 
+/* ===== DETAIL / STATUS CARDS ===== */
+.detail-card, .skor-card, .status-akhir { background: white; padding: 20px 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 16px; max-width: 700px; margin-left: auto; margin-right: auto; }
+.skor-card ul { padding-left: 20px; }
+.actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+.actions button:nth-child(1) { background: #16a34a; }
+.actions button:nth-child(2) { background: #d97706; }
+.actions button:nth-child(3) { background: #dc2626; }
+
+/* ===== ADMIN DASHBOARD ===== */
+.admin-dashboard { max-width: 1000px; margin: 0 auto; }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin-bottom: 20px; }
+.stats div { background: white; padding: 16px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); font-weight: 600; text-align: center; }
+.filter { margin-bottom: 12px; display: flex; gap: 12px; flex-wrap: wrap; }
+.filter select, .filter input { width: auto; min-width: 180px; }
+
+.table-wrap { overflow-x: auto; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+table { width: 100%; border-collapse: collapse; background: white; min-width: 600px; }
+th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #e2e8f0; white-space: nowrap; }
+th { background: #0f766e; color: white; font-weight: 600; }
+tr:hover { background: #f1f5f9; }
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .app-shell { flex-direction: column; }
-  .sidebar { width: 100%; flex-direction: row; align-items: center; justify-content: space-between; padding: 12px 16px; overflow-x: auto; }
-  .sidebar-menu { flex-direction: row; flex: none; }
-  .sidebar-footer { border-top: none; display: flex; align-items: center; gap: 8px; padding-top: 0; }
-  .user-info { margin-bottom: 0; }
-  .logout-btn { width: auto; }
   .main-content { padding: 16px; }
-  .login-page, .register-page, .form-pengajuan-page, .form-penyaluran-page { margin: 20px auto; max-width: 92vw; padding: 20px; }
+  .topbar { padding: 12px 16px; }
   h1 { font-size: 22px; }
-  table { display: block; overflow-x: auto; white-space: nowrap; }
+  .login-page form, .register-page form { padding: 24px; }
 }

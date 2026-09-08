@@ -1,13 +1,33 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {supabase} from '../lib/supabaseClient';
+import { supabase } from '../lib/supabaseClient';
 
 function ResetPassword() {
+  const [checking, setChecking] = useState(true);
+  const [validSession, setValidSession] = useState(false);
   const [password, setPassword] = useState('');
   const [konfirmasi, setKonfirmasi] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) setValidSession(true);
+      setChecking(false);
+    };
+    checkSession();
+
+    const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setValidSession(true);
+        setChecking(false);
+      }
+    });
+
+    return () => listener.subscription.unsubscribe();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -15,6 +35,10 @@ function ResetPassword() {
 
     if (password !== konfirmasi) {
       setError('Password dan konfirmasi tidak cocok.');
+      return;
+    }
+    if (password.length < 6) {
+      setError('Password minimal 6 karakter.');
       return;
     }
 
@@ -28,6 +52,19 @@ function ResetPassword() {
       navigate('/login');
     }
   };
+
+  if (checking) {
+    return <div className="login-page"><p>Memverifikasi link reset...</p></div>;
+  }
+
+  if (!validSession) {
+    return (
+      <div className="login-page">
+        <h1>Link Tidak Valid</h1>
+        <p>Link reset password sudah kedaluwarsa atau tidak valid. Silakan minta link baru dari halaman Lupa Password.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="login-page">
