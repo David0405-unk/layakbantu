@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabaseClient';
 
 function ResetPassword() {
@@ -10,14 +10,27 @@ function ResetPassword() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    const checkSession = async () => {
+    const setupSession = async () => {
+      const code = searchParams.get('code');
+
+      // Kalau link pakai format PKCE (?code=...)
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
+        if (!error) setValidSession(true);
+        setChecking(false);
+        return;
+      }
+
+      // Fallback: cek sesi biasa (format lama #access_token=...)
       const { data: { session } } = await supabase.auth.getSession();
       if (session) setValidSession(true);
       setChecking(false);
     };
-    checkSession();
+
+    setupSession();
 
     const { data: listener } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'PASSWORD_RECOVERY') {
@@ -27,7 +40,7 @@ function ResetPassword() {
     });
 
     return () => listener.subscription.unsubscribe();
-  }, []);
+  }, [searchParams]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -54,7 +67,7 @@ function ResetPassword() {
   };
 
   if (checking) {
-    return <div className="login-page"><p>Memverifikasi link reset...</p></div>;
+    return <div className="login-page"><h1>Memverifikasi link reset...</h1></div>;
   }
 
   if (!validSession) {
