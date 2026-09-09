@@ -15,7 +15,7 @@ function ForgotPassword() {
     setLoading(true);
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'https://lykbntu.netlify.app//reset-password'
+      redirectTo: 'https://lykbntu.netlify.app/reset-password'
     });
 
     setLoading(false);
