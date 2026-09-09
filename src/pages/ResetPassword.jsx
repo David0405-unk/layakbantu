@@ -1,46 +1,40 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { supabase } from '../lib/supabaseClient';
+import { useNavigate } from 'react-router-dom';
+import supabase from '../lib/supabaseClient';
 
 function ResetPassword() {
-  const [checking, setChecking] = useState(true);
-  const [validSession, setValidSession] = useState(false);
   const [password, setPassword] = useState('');
   const [konfirmasi, setKonfirmasi] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [checking, setChecking] = useState(true);
+  const [validSession, setValidSession] = useState(false);
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    const setupSession = async () => {
-      const code = searchParams.get('code');
-
-      // Kalau link pakai format PKCE (?code=...)
-      if (code) {
-        const { error } = await supabase.auth.exchangeCodeForSession(code);
-        if (!error) setValidSession(true);
-        setChecking(false);
-        return;
-      }
-
-      // Fallback: cek sesi biasa (format lama #access_token=...)
+    // Pengecekan sesi dari link reset Supabase
+    const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      if (session) setValidSession(true);
+      if (session) {
+        setValidSession(true);
+      }
       setChecking(false);
     };
 
-    setupSession();
+    checkSession();
 
-    const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+    // Listener jika event PASSWORD_RECOVERY dipicu oleh Supabase
+    const { data: authListener } = supabase.auth.onAuthStateChange(async (event) => {
       if (event === 'PASSWORD_RECOVERY') {
         setValidSession(true);
         setChecking(false);
       }
     });
 
-    return () => listener.subscription.unsubscribe();
-  }, [searchParams]);
+    return () => {
+      authListener?.subscription?.unsubscribe();
+    };
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -56,37 +50,58 @@ function ResetPassword() {
     }
 
     setLoading(true);
-    const { error } = await supabase.auth.updateUser({ password });
+    const { error: updateError } = await supabase.auth.updateUser({ password });
     setLoading(false);
 
-    if (error) setError(error.message);
-    else {
+    if (updateError) {
+      setError(updateError.message);
+    } else {
       alert('Password berhasil diubah, silakan login kembali.');
       navigate('/login');
     }
   };
 
   if (checking) {
-    return <div className="login-page"><h1>Memverifikasi link reset...</h1></div>;
+    return (
+      <div className="login-page" style={{ padding: '20px', textAlign: 'center' }}>
+        <h2>Memverifikasi link reset...</h2>
+      </div>
+    );
   }
 
   if (!validSession) {
     return (
-      <div className="login-page">
-        <h1>Link Tidak Valid</h1>
+      <div className="login-page" style={{ padding: '20px', textAlign: 'center', color: '#333' }}>
+        <h2>Link Tidak Valid</h2>
         <p>Link reset password sudah kedaluwarsa atau tidak valid. Silakan minta link baru dari halaman Lupa Password.</p>
       </div>
     );
   }
 
   return (
-    <div className="login-page">
+    <div className="login-page" style={{ padding: '20px', color: '#333' }}>
       <h1>Buat Password Baru</h1>
       <form onSubmit={handleSubmit}>
-        <input type="password" placeholder="Password Baru" value={password} onChange={(e) => setPassword(e.target.value)} required />
-        <input type="password" placeholder="Konfirmasi Password Baru" value={konfirmasi} onChange={(e) => setKonfirmasi(e.target.value)} required />
-        {error && <p className="error">{error}</p>}
-        <button type="submit" disabled={loading}>{loading ? 'Menyimpan...' : 'Simpan Password Baru'}</button>
+        <input
+          type="password"
+          placeholder="Password Baru"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <br /><br />
+        <input
+          type="password"
+          placeholder="Konfirmasi Password Baru"
+          value={konfirmasi}
+          onChange={(e) => setKonfirmasi(e.target.value)}
+          required
+        />
+        <br /><br />
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        <button type="submit" disabled={loading}>
+          {loading ? 'Menyimpan...' : 'Simpan Password Baru'}
+        </button>
       </form>
     </div>
   );
