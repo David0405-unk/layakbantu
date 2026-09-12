@@ -26,31 +26,53 @@ button:disabled { background: #94a3b8; cursor: not-allowed; }
 .error { color: #dc2626; font-size: 14px; margin: 4px 0; }
 .success-msg { color: #16a34a; font-size: 14px; margin: 4px 0; }
 
-/* ===== AUTH PAGES (Login/Register/Forgot/Reset) ===== */
-.login-page, .register-page {
-  min-height: 100vh; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; padding: 20px;
+/* ===== AUTH PAGES (split-screen: Login/Register/Forgot/Reset) ===== */
+.auth-page {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 24px; background: #eef2f0;
 }
-.login-page > *, .register-page > * { width: 100%; max-width: 420px; }
-.login-page h1, .register-page h1,
-.login-page form, .register-page form,
-.login-page p, .register-page p {
-  background: white; text-align: center;
+.auth-card {
+  display: flex; max-width: 900px; width: 100%; min-height: 520px;
+  background: white; border-radius: 20px; overflow: hidden;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.12);
 }
-.login-page, .register-page {
-  background: linear-gradient(135deg, #f0fdfa, #f4f6f8);
+.auth-left {
+  flex: 0 0 42%; background: linear-gradient(160deg, #0f766e, #22c55e);
+  color: white; padding: 48px 36px; display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: center; gap: 6px;
 }
-.login-page form, .register-page form {
-  display: flex; flex-direction: column; gap: 12px;
-  background: white; padding: 36px; border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+.auth-shield { width: 56px; height: 56px; margin-bottom: 8px; }
+.auth-brand { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
+.auth-welcome { color: white; font-size: 26px; margin: 0 0 8px; }
+.auth-tagline { font-size: 14px; opacity: 0.9; margin: 0 0 28px; line-height: 1.5; }
+.btn-outline-white {
+  background: transparent; border: 1.5px solid white; color: white;
+  padding: 10px 28px; border-radius: 999px; font-weight: 600; font-size: 14px;
 }
-.login-page h1, .register-page h1 {
-  background: transparent; text-align: center; max-width: 420px; width: 100%;
-}
-.switch-auth { text-align: center; font-size: 13px; margin: 10px 0 0; max-width: 420px; width: 100%; }
+.btn-outline-white:hover { background: rgba(255,255,255,0.12); text-decoration: none; }
 
-/* ===== TOPBAR ===== */
+.auth-right { flex: 1; padding: 48px 40px; display: flex; flex-direction: column; justify-content: center; }
+.auth-right h1 { text-align: left; }
+.auth-subtitle { color: #64748b; font-size: 14px; margin: 0 0 24px; }
+.auth-right form { display: flex; flex-direction: column; gap: 14px; }
+.auth-right input { background: #f0fdfa; border: 1px solid #cbd5e1; padding: 12px 16px; border-radius: 999px; }
+.auth-link-line { text-align: right; font-size: 13px; margin: -6px 0 4px; }
+.auth-right button { border-radius: 999px; padding: 12px; margin-top: 8px; font-size: 15px; }
+.switch-auth { text-align: left; margin-top: 18px; font-size: 13px; }
+
+/* Login sederhana untuk halaman ForgotPassword/ResetPassword yang masih pakai .login-page */
+.login-page {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 20px; background: #eef2f0;
+}
+.login-page > * { width: 100%; max-width: 420px; }
+.login-page form {
+  display: flex; flex-direction: column; gap: 12px; background: white;
+  padding: 36px; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+.login-page h1 { text-align: center; }
+
+/* ===== TOPBAR (dashboard warga & admin) ===== */
 .app-shell { min-height: 100vh; display: flex; flex-direction: column; }
 .topbar {
   background: white; border-bottom: 1px solid #e2e8f0;
@@ -115,7 +137,11 @@ button:disabled { background: #94a3b8; cursor: not-allowed; }
 .form-pengajuan-page form, .form-penyaluran-page form { display: flex; flex-direction: column; gap: 4px; }
 
 /* ===== DETAIL / STATUS CARDS ===== */
-.detail-card, .skor-card, .status-akhir { background: white; padding: 20px 24px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 16px; max-width: 700px; margin-left: auto; margin-right: auto; }
+.detail-card, .skor-card, .status-akhir {
+  background: white; padding: 20px 24px; border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 16px;
+  max-width: 700px; margin-left: auto; margin-right: auto;
+}
 .skor-card ul { padding-left: 20px; }
 .actions { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
 .actions button:nth-child(1) { background: #16a34a; }
@@ -140,5 +166,13 @@ tr:hover { background: #f1f5f9; }
   .main-content { padding: 16px; }
   .topbar { padding: 12px 16px; }
   h1 { font-size: 22px; }
-  .login-page form, .register-page form { padding: 24px; }
+  .login-page form { padding: 24px; }
+
+  .auth-page { padding: 0; align-items: flex-start; background: #0f766e; }
+  .auth-card { flex-direction: column; border-radius: 0; min-height: 100vh; box-shadow: none; }
+  .auth-left { flex: none; border-radius: 0 0 32px 32px; padding: 40px 24px 60px; align-items: center; text-align: center; }
+  .auth-welcome { font-size: 22px; }
+  .auth-right { margin-top: -40px; background: white; border-radius: 24px 24px 0 0; padding: 32px 24px; flex: 1; }
+  .auth-right h1, .auth-subtitle, .switch-auth { text-align: center; }
+  .auth-right form { align-items: stretch; }
 }
